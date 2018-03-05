@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'ptn'   # lib/ptn.rb
+s = Ptn::Sample.new
+s.say_hello
