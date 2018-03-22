@@ -1,4 +1,34 @@
 #!/usr/bin/env ruby
+
 require 'ptn'   # lib/ptn.rb
+
+# Initial Test
 s = Ptn::Sample.new
 s.say_hello
+
+#candles = [
+#  ["04-03-2018 20:30",849.89001,854.35946,852.35501,854.86247,852.3691633333334,112.30772151],
+#  ["04-03-2018 21:00",852.03,852.285,855.97,855.97,854.6566666666668,88.02350651]
+#]
+#                                                                                                                              Shape  Top     Low
+candles = [
+  {start_time: "21-03-2018 15:30", low: 9008.2,   open: 9130.001,   close: 9091.99,    high: 9147.4,     amount: 23.086},  #           small   long
+  {start_time: "21-03-2018 16:00", low: 9040.54,  open: 9069.293,   close: 9064.92,    high: 9104.981,   amount: 21.091},  #     doji  small   long
+  {start_time: "21-03-2018 21:00", low: 8800.0,   open: 8872.461,   close: 8894.568,   high: 8910.0,     amount: 18.404},  #     doji  small   long
+  {start_time: "22-03-2018 03:30", low: 8881.413, open: 8910.596,   close: 9020.0,     high: 9056.99,    amount: 32.573},   #           long   long
+  {start_time: "22-03-2018 14:30", low: 8626.0,   open: 8689.433,   close: 8670.989,   high: 8721.505,   amount: 32.573} 
+]
+
+body_avg = (candles[0][:open]-candles[0][:close]).abs
+puts "Candles:"
+candles.each do |candle|
+  my    = Ptn::Candle.new candle
+  color = my.buy? ? Ptn::RED : Ptn::GREEN
+  puts Ptn::colored Ptn::RED,   "At: #{my.start_time}: #{my.low} - #{my.high} | #{my.open} - #{my.close} | #{my.amount} | Buy: #{my.buy?} - Sell: #{my.sell?} | body: #{my.body}"
+  
+#  Ptn::Patrec.identify_single my
+  
+  puts "Shape:        #{Ptn::Patrec.shape(my, body_avg)}"
+  puts "Top Shadow:   #{Ptn::Patrec.top_shadow(my)}"
+  puts "Bottom Shadow #{Ptn::Patrec.top_shadow(my)}"
+end
